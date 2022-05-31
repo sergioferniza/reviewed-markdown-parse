@@ -101,4 +101,107 @@ public class MarkdownParseTest {
 		ArrayList links = mdp.getLinks(content);
 		assertEquals(List.of("a link on the first line"), links);
 	}
+
+/// snippet 1 ///
+
+	@Test
+
+	public void testSnip_1_1() {
+		List<String> actVal = MarkdownParse.getLinks("`[a link`](url.com)");
+		List<String> expVal = new ArrayList<>();
+		assertEquals(expVal,actVal);
+	}
+
+	@Test 
+
+	public void testSnip_1_2() {
+		List<String> actVal = MarkdownParse.getLinks("[another link](`google.com)`");
+		List<String> expVal = List.of("`google.com");
+		assertEquals(expVal,actVal);
+	}
+
+	@Test 
+
+	public void testSnip_1_3() {
+		List<String> actVal = MarkdownParse.getLinks("[`cod[e`](google.com)");
+		List<String> expVal = List.of("google.com");
+		assertEquals(expVal,actVal);
+	}
+
+	@Test 
+
+	public void testSnip_1_4() {
+		List<String> actVal = MarkdownParse.getLinks("[`code]`](ucsd.edu)");
+		List<String> expVal = List.of("ucsd.edu");
+		assertEquals(expVal,actVal);
+	}
+
+	/// snippet 2 ///
+
+	@Test
+
+	public void testSnip2_1() throws IOException {
+		List<String> actVal = MarkdownParse.getLinks(
+			"[a [nested link](a.com)](b.com)");
+		List<String> expVal = List.of("a.com");
+		assertEquals(expVal,actVal);
+	}
+
+	@Test
+
+	public void testSnip2_2() {
+		List<String> actVal = MarkdownParse.getLinks(
+			"[a nested parenthesized url](a.com(()))");
+		List<String> expVal = List.of("a.com(())");
+		assertEquals(expVal,actVal);
+	}
+
+	@Test
+
+	public void testSnip2_3() throws IOException {
+		List<String> actVal = MarkdownParse.getLinks(Files.readString(
+			Path.of("snip2_3.md")));
+		List<String> expVal = List.of("example.com");
+		assertEquals(expVal,actVal); 
+	}
+
+
+	/// snippet 3 ///
+
+	@Test 
+
+	public void testSnip3_1() throws IOException {
+		Path file = Path.of("snip3_1.md");
+		String fileContent = Files.readString(file);
+		List<String> expVal = new ArrayList<>();
+		assertEquals(expVal,MarkdownParse.getLinks(fileContent));
+	}
+
+	@Test
+
+	public void testSnip3_2() throws IOException {
+		Path file = Path.of("snip3_2.md");
+		String fileContent = Files.readString(file);
+		List<String> expVal = List.of(
+			"https://sites.google.com/eng.ucsd.edu/cse-15l-spring-2022/schedule");
+		assertEquals(expVal, MarkdownParse.getLinks(fileContent));
+	}
+
+	@Test
+
+	public void testSnip3_3() throws IOException{
+		Path file = Path.of("snip3_3.md");
+		String fileContent = Files.readString(file);
+		List<String> expVal = new ArrayList<>();
+		assertEquals(expVal,MarkdownParse.getLinks(fileContent));
+	}
+
+	@Test
+
+	public void testSnip3_4() throws IOException {
+		Path file = Path.of("snip3_4.md");
+		String fileContent = Files.readString(file);
+		List<String> expVal = new ArrayList<>();
+		assertEquals(expVal,MarkdownParse.getLinks(fileContent));
+	}
 }
